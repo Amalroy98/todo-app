@@ -7,20 +7,20 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f0f2f5;
+            background: linear-gradient(to bottom, #6dd5ed, #2193b0);
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
+            padding: 20px;
             margin: 0;
-            padding-top: 50px;
+            min-height: 100vh;
         }
         .container {
             background: white;
             padding: 30px 40px;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 450px;
         }
         h1 {
             text-align: center;
@@ -32,43 +32,61 @@
         }
         input[type="text"] {
             flex: 1;
-            padding: 10px;
-            border-radius: 5px 0 0 5px;
+            padding: 12px;
+            border-radius: 8px 0 0 8px;
             border: 1px solid #ccc;
             font-size: 16px;
         }
         button {
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
-            background-color: #4CAF50;
+            background-color: #28a745;
             color: white;
             font-size: 16px;
-            border-radius: 0 5px 5px 0;
+            border-radius: 0 8px 8px 0;
             cursor: pointer;
+            transition: 0.2s;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #218838;
         }
         ul {
             list-style-type: none;
             padding: 0;
         }
         li {
-            background: #f9f9f9;
-            padding: 10px;
+            background: #f8f9fa;
+            padding: 12px;
             margin-bottom: 10px;
-            border-radius: 5px;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: 0.2s;
+        }
+        li:hover {
+            background: #e9ecef;
         }
         a {
-            color: #e74c3c;
+            color: #dc3545;
             text-decoration: none;
             font-weight: bold;
+            margin-left: 10px;
         }
         a:hover {
             text-decoration: underline;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+            input[type="text"], button {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -81,8 +99,8 @@
         </form>
         <ul>
             {% for task in tasks %}
-            <li>
-                {{ task.content }}
+            <li class="{% if task.completed %}completed{% endif %}">
+                <a href="/toggle/{{ task.id }}">✔</a> {{ task.content }}
                 <a href="/delete/{{ task.id }}">Delete</a>
             </li>
             {% endfor %}
