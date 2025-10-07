@@ -67,6 +67,16 @@
         li:hover {
             background: #e9ecef;
         }
+        .task-left {
+            display: flex;
+            align-items: center;
+        }
+        .task-left input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
         a {
             color: #dc3545;
             text-decoration: none;
@@ -76,7 +86,7 @@
         a:hover {
             text-decoration: underline;
         }
-        .completed {
+        .completed-label {
             text-decoration: line-through;
             color: #6c757d;
         }
@@ -99,8 +109,13 @@
         </form>
         <ul>
             {% for task in tasks %}
-            <li class="{% if task.completed %}completed{% endif %}">
-                <a href="/toggle/{{ task.id }}">✔</a> {{ task.content }}
+            <li>
+                <div class="task-left">
+                    <form method="GET" action="/toggle/{{ task.id }}">
+                        <input type="checkbox" onChange="this.form.submit()" {% if task.completed %}checked{% endif %}>
+                    </form>
+                    <span class="{% if task.completed %}completed-label{% endif %}">{{ task.content }}</span>
+                </div>
                 <a href="/delete/{{ task.id }}">Delete</a>
             </li>
             {% endfor %}
