@@ -6,10 +6,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+# Task model with 'completed' column
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
+    completed = db.Column(db.Boolean, default=False)
 
+# Home route to display tasks and add new tasks
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -21,6 +24,7 @@ def index():
     tasks = Task.query.all()
     return render_template('index.html', tasks=tasks)
 
+# Delete a task
 @app.route('/delete/<int:id>')
 def delete(id):
     task = Task.query.get_or_404(id)
@@ -28,6 +32,15 @@ def delete(id):
     db.session.commit()
     return redirect('/')
 
+# Toggle task completed status
+@app.route('/toggle/<int:id>', methods=['GET', 'POST'])
+def toggle(id):
+    task = Task.query.get_or_404(id)
+    task.completed = not task.completed
+    db.session.commit()
+    return redirect('/')
+
+# Run app
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
